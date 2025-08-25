@@ -1,0 +1,5 @@
+# Блоки, которые будут игнорировать правила плагина.
+# Список всех блоков: https://jd.papermc.io/paper/1.20.4/org/bukkit/Material.html
+whitelistBlocks:
+  - GRASS_BLOCK
+  - STONE
