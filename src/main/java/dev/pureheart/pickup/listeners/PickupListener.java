@@ -2,22 +2,28 @@ package dev.pureheart.pickup.listeners;
 
 import dev.pureheart.pickup.Loader;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.EnumSet;
 
 public class PickupListener implements Listener {
 
-    private final List<String> whitelistBlocks;
+    private final EnumSet<Material> whitelistBlocks;
 
     public PickupListener(Loader plugin) {
-        this.whitelistBlocks = plugin.getConfig().getStringList("whitelistBlocks");
+        this.whitelistBlocks = EnumSet.noneOf(Material.class);
+
+        for (String name : plugin.getConfig().getStringList("whitelistBlocks")) {
+            Material material = Material.valueOf(name.toUpperCase());
+            whitelistBlocks.add(material);
+        }
     }
 
     @EventHandler
@@ -27,13 +33,15 @@ public class PickupListener implements Listener {
         if (!event.isDropItems() || player.getGameMode() == GameMode.CREATIVE) return;
 
         Block block = event.getBlock();
-        String type = block.getType().name();
+        Material type = block.getType();
 
         if (whitelistBlocks.contains(type)) return;
 
         event.setDropItems(false);
 
-        List<ItemStack> drops = new ArrayList<>(block.getDrops(player.getInventory().getItemInMainHand()));
-        drops.forEach(drop -> player.getInventory().addItem(drop));
+        PlayerInventory inventory = player.getInventory();
+        for (ItemStack drop : block.getDrops(inventory.getItemInMainHand())) {
+            inventory.addItem(drop);
+        }
     }
 }
