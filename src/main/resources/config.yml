@@ -3,3 +3,9 @@
 whitelistBlocks:
   - GRASS_BLOCK
   - STONE
+
+messages:
+  help: '<yellow>Используйте: <gold>/purpickup reload'
+  noPerm: '<red>Недостаточно прав.'
+  noArg: '<red>Неверный аргумент.'
+  reloaded: '<green>Конфиги перезагружены.'

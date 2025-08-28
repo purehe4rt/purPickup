@@ -11,20 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.EnumSet;
-
-public class PickupListener implements Listener {
-
-    private final EnumSet<Material> whitelistBlocks;
-
-    public PickupListener(Loader plugin) {
-        this.whitelistBlocks = EnumSet.noneOf(Material.class);
-
-        for (String name : plugin.getConfig().getStringList("whitelistBlocks")) {
-            Material material = Material.valueOf(name.toUpperCase());
-            whitelistBlocks.add(material);
-        }
-    }
+public record PickupListener(Loader plugin) implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
@@ -35,7 +22,7 @@ public class PickupListener implements Listener {
         Block block = event.getBlock();
         Material type = block.getType();
 
-        if (whitelistBlocks.contains(type)) return;
+        if (plugin.getWhitelistBlocks().contains(type)) return;
 
         event.setDropItems(false);
 

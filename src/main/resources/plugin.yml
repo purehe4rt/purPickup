@@ -5,3 +5,6 @@ main: dev.pureheart.pickup.Loader
 api-version: '1.20'
 
 authors: [ pureheart_ ]
+
+commands:
+  purpickup:
