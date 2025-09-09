@@ -1,15 +1,19 @@
 package dev.pureheart.pickup;
 
+import dev.pureheart.pickup.commands.PickupCommand;
+import dev.pureheart.pickup.commands.PluginCommand;
 import dev.pureheart.pickup.listeners.PickupListener;
+import dev.pureheart.pickup.sql.Database;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.EnumSet;
 
+@Getter
 public final class Loader extends JavaPlugin {
 
-    @Getter
+    private Database database;
     private EnumSet<Material> whitelistBlocks;
 
     @Override
@@ -17,8 +21,18 @@ public final class Loader extends JavaPlugin {
         saveDefaultConfig();
         createListBlocks();
 
-        getCommand("purpickup").setExecutor(new Commands(this));
+        database = new Database(this);
+        database.setup();
+
+        getCommand("purpickup").setExecutor(new PluginCommand(this));
+        getCommand("autopickup").setExecutor(new PickupCommand(this));
+
         getServer().getPluginManager().registerEvents(new PickupListener(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        database.close();
     }
 
     public void createListBlocks() {

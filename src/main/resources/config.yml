@@ -1,3 +1,8 @@
+# Файл базы данных.
+database: 'database.db'
+# Включен ли автоподбор автоматически?
+autoPickupActivated: false
+
 # Блоки, которые будут игнорировать правила плагина.
 # Список всех блоков: https://jd.papermc.io/paper/1.20.4/org/bukkit/Material.html
 whitelistBlocks:
@@ -8,4 +13,7 @@ messages:
   help: '<yellow>Используйте: <gold>/purpickup reload'
   noPerm: '<red>Недостаточно прав.'
   noArg: '<red>Неверный аргумент.'
+  onlyPlayers: '<red>Доступно только игрокам.'
   reloaded: '<green>Конфиги перезагружены.'
+  toggledOn: '<yellow>Автоподбор <green>включен.'
+  toggledOff: '<yellow>Автоподбор <red>выключен.'
