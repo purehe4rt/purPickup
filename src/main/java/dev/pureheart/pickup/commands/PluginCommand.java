@@ -10,29 +10,16 @@ import org.jetbrains.annotations.NotNull;
 public record PluginCommand(Loader plugin) implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!commandSender.hasPermission("purpickup.admin")) {
-            String noPerm = plugin.getConfig().getString("messages.noPerm", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(noPerm));
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String l, @NotNull String[] a) {
+        if (!sender.hasPermission("purpickup.admin")) {
+            sender.sendMessage(ColorUtil.colorize(plugin.getConfigManager().getNoPerm()));
             return true;
         }
 
-        if (strings.length == 0) {
-            String help = plugin.getConfig().getString("messages.help", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(help));
-            return true;
-        }
+        plugin.getConfigManager().reload();
+        plugin.createListBlocks();
 
-        if (strings[0].equalsIgnoreCase("reload")) {
-            plugin.reloadConfig();
-            plugin.createListBlocks();
-
-            String reloaded = plugin.getConfig().getString("messages.reloaded", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(reloaded));
-        } else {
-            String noArg = plugin.getConfig().getString("messages.noArg", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(noArg));
-        }
+        sender.sendMessage(ColorUtil.colorize(plugin.getConfigManager().getReloaded()));
 
         return true;
     }

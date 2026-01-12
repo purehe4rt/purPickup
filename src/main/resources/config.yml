@@ -10,9 +10,7 @@ whitelistBlocks:
   - STONE
 
 messages:
-  help: '<yellow>Используйте: <gold>/purpickup reload'
   noPerm: '<red>Недостаточно прав.'
-  noArg: '<red>Неверный аргумент.'
   onlyPlayers: '<red>Доступно только игрокам.'
   reloaded: '<green>Конфиги перезагружены.'
   toggledOn: '<yellow>Автоподбор <green>включен.'

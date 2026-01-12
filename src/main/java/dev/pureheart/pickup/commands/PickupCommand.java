@@ -13,27 +13,23 @@ import java.util.UUID;
 public record PickupCommand(Loader plugin) implements CommandExecutor {
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player)) {
-            String onlyPlayers = plugin.getConfig().getString("messages.onlyPlayers", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(onlyPlayers));
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String l, @NotNull String[] a) {
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(ColorUtil.colorize(plugin.getConfigManager().getOnlyPlayers()));
             return true;
         }
 
-        UUID uuid = ((Player) commandSender).getUniqueId();
+        UUID uuid = player.getUniqueId();
 
-        boolean current = plugin.getDatabase().getEnabled(uuid);
-        boolean switchEnabled = !current;
+        boolean current = plugin.getDatabase().isEnabled(uuid);
+        boolean state = !current;
 
-        plugin.getDatabase().addPlayer(uuid, switchEnabled);
+        plugin.getDatabase().setEnabled(uuid, state);
 
-        if (switchEnabled) {
-            String toggledOn = plugin.getConfig().getString("messages.toggledOn", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(toggledOn));
-        } else {
-            String toggledOff = plugin.getConfig().getString("messages.toggledOff", "<red>Сообщение не найдено :c");
-            commandSender.sendMessage(ColorUtil.colorize(toggledOff));
-        }
+        player.sendMessage(ColorUtil.colorize(state ?
+                plugin.getConfigManager().getToggledOn() :
+                plugin.getConfigManager().getToggledOff()
+        ));
 
         return true;
     }
